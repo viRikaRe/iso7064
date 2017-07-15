@@ -3,9 +3,9 @@ A simple JavaScript library that implements ISO/IEC 7064:2003 and some similar v
 Adapted from Daniel Wagner's Java implementation: https://github.com/danieltwagner/iso7064
 
 ## Warning
-* No validation yet.
+* No exception handling yet.
 * Polynomial method not implemented yet.
-* Tests not implemented yet.
+* Tests not implemented yet. Use with caution!
 
 ## Usage
 ```
