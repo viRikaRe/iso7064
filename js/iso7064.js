@@ -1,3 +1,4 @@
+//The abstract class of pure system
 class PureSystemCalculator {
   constructor({
     Modulus,
@@ -46,6 +47,41 @@ class PureSystemCalculator {
   }
 }
 
+//The abstract class of hybrid system
+class HybridSystemCalculator extends PureSystemCalculator {
+  constructor({
+    Modulus,
+    Radix,
+    Remainder,
+    ApplicationCharset,
+    CheckCharset,
+    IsDoubleCheckCharacter
+  }) {
+    super({
+      Modulus: Modulus,
+      Radix: 2,
+      Remainder: Remainder,
+      ApplicationCharset: ApplicationCharset,
+      CheckCharset: CheckCharset,
+      IsDoubleCheckCharacter: false
+    });
+  }
+
+  compute(input) {
+    input = input.toUpperCase();
+    let P = this.M;
+    for (let i = 0; i < input.length; i++) {
+      let a = this.acs.indexOf(input.charAt(i));
+      P = (P + a) % this.M;
+      if (P === 0) P = this.M;
+      P = (P * this.r) % (this.M + 1);
+    }
+    return this.ccs.charAt((this.M + this.R - P) % this.M);
+  }
+}
+
+
+//Here comes actually usable classes
 class MOD11_2 extends PureSystemCalculator {
   constructor() {
     super({
@@ -106,6 +142,37 @@ class MOD1271_36 extends PureSystemCalculator {
   }
 }
 
+class MOD11_10 extends HybridSystemCalculator {
+  constructor() {
+    super({
+      Modulus: 10,
+      ApplicationCharset: "0123456789",
+      CheckCharset: "0123456789"
+    });
+  }
+}
+
+class MOD27_26 extends HybridSystemCalculator {
+  constructor() {
+    super({
+      Modulus: 26,
+      ApplicationCharset: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      CheckCharset: "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    });
+  }
+}
+
+class MOD37_36 extends HybridSystemCalculator {
+  constructor() {
+    super({
+      Modulus: 26,
+      ApplicationCharset: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      CheckCharset: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    });
+  }
+}
+
+
 //GB 11714-1997
 //https://zh.wikisource.org/wiki/GB_11714-1997_全国组织机构代码编制规则
 class GB11714 extends PureSystemCalculator {
@@ -114,7 +181,7 @@ class GB11714 extends PureSystemCalculator {
       Modulus: 11,
       Radix: 2,
       Remainder: 0,
-      ApplicationCharset: "0123456789",
+      ApplicationCharset: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
       CheckCharset: "0123456789X",
       IsDoubleCheckCharacter: false
     });
