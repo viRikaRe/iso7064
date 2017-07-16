@@ -4,7 +4,7 @@ Adapted from Daniel Wagner's Java implementation: https://github.com/danieltwagn
 
 ## Status
 * Polynomial method not implemented yet.
-* Tests not implemented yet. Use with caution!
+* Tests still largely missing. Use with caution!
 
 ## Usage
 ```

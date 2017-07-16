@@ -7,8 +7,7 @@ class PureSystemCalculator {
     ApplicationCharset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
     CheckCharset,
     IsDoubleCheckCharacter,
-    SingleDigitDesignation = 0,
-    EnableSanitizer = false
+    SingleDigitDesignation = 0
   }) {
     this.M = Modulus;
     this.r = Radix;
@@ -17,22 +16,20 @@ class PureSystemCalculator {
     this.dblchk = IsDoubleCheckCharacter;
     this.R = Remainder;
     this.desig = SingleDigitDesignation;
-    this.sanit = EnableSanitizer;
   }
 
   //Returns the computed check character(s) only
-  //If input is not valid, return null
+  //If input type is invalid, return null;
+  //If input string contains character outside charset, return undefined;
   compute(input) {
-    if (this.sanit && (typeof input !== "string"))
+    if (typeof input !== "string" || input === "")
       return null;
 
     input = input.toUpperCase();
-    if (this.sanit && !this.sanitycheck(input, this.acs))
-      return null;
-    
     let P = 0;
     for (let i = 0; i < input.length; i++) {
       let a = this.acs.indexOf(input.charAt(i));
+      if (a === -1) return undefined;
       P = ((P + a) * this.r) % this.M;
     }
     if (this.dblchk) {
@@ -49,26 +46,23 @@ class PureSystemCalculator {
   //Returns the full string with check character(s)
   complete(input) {
     let checkbit = this.compute(input);
-    if (checkbit !== null)
+    if (typeof checkbit === "string")
       return input + checkbit;
     else
-      return null;
+      return checkbit;
   }
 
   //Verify the full string
   verify(input) {
     let checkLen = 1 + this.dblchk;
-    if (this.sanit && (typeof input !== "string" || input.length <= checkLen + 1))
+    if (typeof input !== "string" || input.length <= checkLen)
       return null;
-    let appstr = input.substr(0, input.length - checkLen);
-    let checkbit = this.compute(appstr);
-    return checkbit === input.substr(-checkLen);
-  }
-
-  //Check whether input string is limited to charset
-  sanitycheck(input, charset) {
-    let RE = "^[" + charset + "]+$";
-    return input.match(RE) !== null;
+    let dataOnly = input.substr(0, input.length - checkLen);
+    let checkbit = this.compute(dataOnly);
+    if (typeof checkbit === "string")
+      return checkbit === input.substr(-checkLen);
+    else
+      return checkbit;
   }
 }
 
