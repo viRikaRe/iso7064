@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="js/iso7064.js"></script>
+    <title>Speed</title>
+</head>
+
+<body>
+    <!-- Functions to compare -->
+    <script>
+        /* Verify whether all characters in a string is within a charset 
+        ** Winner is Method 2, though Chrome blazing fast with Method 3 ("nested for loop") */
+        function VerifyStringAgainstCharsetCaller(which) {
+            let loops = 999999;
+            /********** Good String **********
+                        Method 1    Method 2    Method 3
+            Chrome:        690ms       362ms        59ms
+            Firefox:       712ms       593ms      3171ms
+            Edge:          405ms       241ms      2580ms
+            **********************************/
+            let str = "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ";
+            /********** Bad String ***********
+                        Method 1    Method 2    Method 3
+            Chrome:      11988ms       390ms        61ms
+            Firefox:     12036ms       717ms      3385ms
+            Edge:         9248ms       247ms      2590ms
+            **********************************/
+            //let str = "ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ."
+
+            switch (which) {
+                case 1: VerifyStringAgainstCharset1(str, loops); break;
+                case 2: VerifyStringAgainstCharset2(str, loops); break;
+                case 3: VerifyStringAgainstCharset3(str, loops); break;
+            }
+            return true;
+        }
+        function VerifyStringAgainstCharset1(str, loops) {
+            let charset = "[0-9A-Z]{" + str.length + "}";
+            for (let i = 0; i < loops; i++)
+                str.search(charset);
+        }
+        function VerifyStringAgainstCharset2(str, loops) {
+            let charset = "^[0-9A-Z]*$";
+            for (let i = 0; i < loops; i++)
+                str.match(charset);
+        }
+        function VerifyStringAgainstCharset3(str, loops) {
+            let len = str.length;
+            let charset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for (let i = 0; i < loops; i++) {
+                let j;
+                for (j = 0; j < str.length; j++)
+                    charset.indexOf(str[j]);
+            }
+        }
+    </script>
+
+    <!-- Main body -->
+    <script>
+        function runTest1() {
+            let t0 = performance.now();
+            VerifyStringAgainstCharsetCaller(1);
+            let t1 = performance.now();
+            document.getElementById("lblTest1").innerText = ~~(t1 - t0) + " ms";
+        }
+        function runTest2() {
+            let t0 = performance.now();
+            VerifyStringAgainstCharsetCaller(2);
+            let t1 = performance.now();
+            document.getElementById("lblTest2").innerText = ~~(t1 - t0) + " ms";
+        }
+        function runTest3() {
+            let t0 = performance.now();
+            VerifyStringAgainstCharsetCaller(3);
+            let t1 = performance.now();
+            document.getElementById("lblTest3").innerText = ~~(t1 - t0) + " ms";
+        }
+    </script>
+
+    <p>
+        <input id="btnTest1" type="button" value="Method 1" onclick="runTest1()" />
+        <span id="lblTest1"></span>
+    </p>
+    <p>
+        <input id="btnTest2" type="button" value="Method 2" onclick="runTest2()" />
+        <span id="lblTest2"></span>
+    </p>
+    <p>
+        <input id="btnTest3" type="button" value="Method 3" onclick="runTest3()" />
+        <span id="lblTest3"></span>
+    </p>
+
+</body>
+
+</html>

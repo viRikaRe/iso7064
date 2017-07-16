@@ -7,7 +7,8 @@ class PureSystemCalculator {
     ApplicationCharset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
     CheckCharset,
     IsDoubleCheckCharacter,
-    SingleDigitDesignation = 0
+    SingleDigitDesignation = 0,
+    EnableSanitizer = false
   }) {
     this.M = Modulus;
     this.r = Radix;
@@ -16,11 +17,19 @@ class PureSystemCalculator {
     this.dblchk = IsDoubleCheckCharacter;
     this.R = Remainder;
     this.desig = SingleDigitDesignation;
+    this.sanit = EnableSanitizer;
   }
 
   //Returns the computed check character(s) only
+  //If input is not valid, return null
   compute(input) {
+    if (this.sanit && (typeof input !== "string"))
+      return null;
+
     input = input.toUpperCase();
+    if (this.sanit && !this.sanitycheck(input, this.acs))
+      return null;
+    
     let P = 0;
     for (let i = 0; i < input.length; i++) {
       let a = this.acs.indexOf(input.charAt(i));
@@ -39,13 +48,27 @@ class PureSystemCalculator {
 
   //Returns the full string with check character(s)
   complete(input) {
-    return input + this.compute(input);
+    let checkbit = this.compute(input);
+    if (checkbit !== null)
+      return input + checkbit;
+    else
+      return null;
   }
 
   //Verify the full string
   verify(input) {
     let checkLen = 1 + this.dblchk;
-    return this.compute(input.substr(0, input.length - checkLen)) === input.substr(-checkLen);
+    if (this.sanit && (typeof input !== "string" || input.length <= checkLen + 1))
+      return null;
+    let appstr = input.substr(0, input.length - checkLen);
+    let checkbit = this.compute(appstr);
+    return checkbit === input.substr(-checkLen);
+  }
+
+  //Check whether input string is limited to charset
+  sanitycheck(input, charset) {
+    let RE = "^[" + charset + "]+$";
+    return input.match(RE) !== null;
   }
 }
 
