@@ -6,7 +6,8 @@ class PureSystemCalculator {
     Remainder = 1,
     ApplicationCharset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
     CheckCharset,
-    IsDoubleCheckCharacter
+    IsDoubleCheckCharacter,
+    SingleDigitDesignation = 0
   }) {
     this.M = Modulus;
     this.r = Radix;
@@ -14,6 +15,7 @@ class PureSystemCalculator {
     this.ccs = CheckCharset;
     this.dblchk = IsDoubleCheckCharacter;
     this.R = Remainder;
+    this.desig = SingleDigitDesignation;
   }
 
   //Returns the computed check character(s) only
@@ -55,7 +57,8 @@ class HybridSystemCalculator extends PureSystemCalculator {
     Remainder,
     ApplicationCharset,
     CheckCharset,
-    IsDoubleCheckCharacter
+    IsDoubleCheckCharacter,
+    SingleDigitDesignation
   }) {
     super({
       Modulus: Modulus,
@@ -63,7 +66,8 @@ class HybridSystemCalculator extends PureSystemCalculator {
       Remainder: Remainder,
       ApplicationCharset: ApplicationCharset,
       CheckCharset: CheckCharset,
-      IsDoubleCheckCharacter: false
+      IsDoubleCheckCharacter: false,
+      SingleDigitDesignation: SingleDigitDesignation
     });
   }
 
@@ -89,7 +93,8 @@ class MOD11_2 extends PureSystemCalculator {
       Radix: 2,
       ApplicationCharset: "0123456789",
       CheckCharset: "0123456789X",
-      IsDoubleCheckCharacter: false
+      IsDoubleCheckCharacter: false,
+      SingleDigitDesignation: 1
     });
   }
 }
@@ -101,7 +106,8 @@ class MOD37_2 extends PureSystemCalculator {
       Radix: 2,
       ApplicationCharset: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
       CheckCharset: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ*",
-      IsDoubleCheckCharacter: false
+      IsDoubleCheckCharacter: false,
+      SingleDigitDesignation: 2
     });
   }
 }
@@ -113,7 +119,8 @@ class MOD97_10 extends PureSystemCalculator {
       Radix: 10,
       ApplicationCharset: "0123456789",
       CheckCharset: "0123456789",
-      IsDoubleCheckCharacter: true
+      IsDoubleCheckCharacter: true,
+      SingleDigitDesignation: 3
     });
   }
 }
@@ -125,7 +132,8 @@ class MOD661_26 extends PureSystemCalculator {
       Radix: 26,
       ApplicationCharset: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
       CheckCharset: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-      IsDoubleCheckCharacter: true
+      IsDoubleCheckCharacter: true,
+      SingleDigitDesignation: 4
     });
   }
 }
@@ -137,7 +145,8 @@ class MOD1271_36 extends PureSystemCalculator {
       Radix: 36,
       ApplicationCharset: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
       CheckCharset: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-      IsDoubleCheckCharacter: true
+      IsDoubleCheckCharacter: true,
+      SingleDigitDesignation: 5
     });
   }
 }
@@ -147,7 +156,8 @@ class MOD11_10 extends HybridSystemCalculator {
     super({
       Modulus: 10,
       ApplicationCharset: "0123456789",
-      CheckCharset: "0123456789"
+      CheckCharset: "0123456789",
+      SingleDigitDesignation: 6
     });
   }
 }
@@ -157,7 +167,8 @@ class MOD27_26 extends HybridSystemCalculator {
     super({
       Modulus: 26,
       ApplicationCharset: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-      CheckCharset: "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      CheckCharset: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      SingleDigitDesignation: 7
     });
   }
 }
@@ -167,7 +178,8 @@ class MOD37_36 extends HybridSystemCalculator {
     super({
       Modulus: 26,
       ApplicationCharset: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-      CheckCharset: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+      CheckCharset: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      SingleDigitDesignation: 8
     });
   }
 }
