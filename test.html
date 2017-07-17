@@ -6,46 +6,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="js/iso7064.js"></script>
+    <script src="js/iso7064poly.js"></script>
     <title>Test</title>
 </head>
 
 <body>
     <script>
         let algo;
-
-        algo = new MOD11_2();
-        console.log(algo.complete());
-        console.log(algo.complete(NaN));
-        console.log(algo.complete(undefined));
-        console.log(algo.complete(""));
-        console.log(algo.complete("A"));
-        console.log(algo.complete("a"));
-        console.log(algo.complete("iso"));
-        console.log(algo.complete("000?"));
-        console.log(algo.complete("!000"));
-        console.log(algo.complete("烫烫烫"));
-        console.log(algo.complete("0"));
-        console.log();
-        console.log(algo.verify());
-        console.log(algo.verify(NaN));
-        console.log(algo.verify(undefined));
-        console.log(algo.verify(""));
-        console.log(algo.verify("A"));
-        console.log(algo.verify("a"));
-        console.log(algo.verify("iso"));
-        console.log(algo.verify("000?"));
-        console.log(algo.verify("!000"));
-        console.log(algo.verify("烫烫烫"));
-        console.log(algo.verify("0"));
-        console.log(algo.verify("01"));
-
-        algo = new MOD11_2();
+        /*
+                algo = new MOD11_2();
+                console.log(algo.complete());
+                console.log(algo.complete(NaN));
+                console.log(algo.complete(undefined));
+                console.log(algo.complete(""));
+                console.log(algo.complete("A"));
+                console.log(algo.complete("a"));
+                console.log(algo.complete("iso"));
+                console.log(algo.complete("000?"));
+                console.log(algo.complete("!000"));
+                console.log(algo.complete("烫烫烫"));
+                console.log(algo.complete("0"));
+                console.log();
+                console.log(algo.verify());
+                console.log(algo.verify(NaN));
+                console.log(algo.verify(undefined));
+                console.log(algo.verify(""));
+                console.log(algo.verify("A"));
+                console.log(algo.verify("a"));
+                console.log(algo.verify("iso"));
+                console.log(algo.verify("000?"));
+                console.log(algo.verify("!000"));
+                console.log(algo.verify("烫烫烫"));
+                console.log(algo.verify("0"));
+                console.log(algo.verify("01"));
+        */
+        algo = new MOD11_2_poly();
+        
         document.writeln(algo.complete("079"));
         document.writeln(algo.complete("0794"));
         document.writeln(algo.verify("079X"));
         document.writeln(algo.verify("07940"));
         document.writeln("<br>");
-
+        
         algo = new MOD1271_36();
         document.writeln(algo.complete("ISO79"));
         document.writeln(algo.verify("ISO793W"));

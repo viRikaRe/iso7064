@@ -3,7 +3,6 @@ A simple JavaScript library that implements ISO/IEC 7064:2003 and some similar v
 Adapted from Daniel Wagner's Java implementation: https://github.com/danieltwagner/iso7064
 
 ## Status
-* Polynomial method not implemented yet.
 * Tests still largely missing. Use with caution!
 
 ## Usage
