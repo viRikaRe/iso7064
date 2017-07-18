@@ -29,7 +29,8 @@ class PureSystemCalculator {
     let P = 0;
     for (let i = 0; i < input.length; i++) {
       let a = this.acs.indexOf(input.charAt(i));
-      if (a === -1) return undefined;
+      if (a === -1)
+        return undefined;
       P = ((P + a) * this.r) % this.M;
     }
     if (this.dblchk) {
@@ -113,6 +114,22 @@ class MOD11_2 extends PureSystemCalculator {
       IsDoubleCheckCharacter: false,
       SingleDigitDesignation: 1
     });
+  }
+
+  //Much faster on Chrome; the same on Firefox; slower on Edge
+  verify_fast(input) {
+    if (typeof input !== "string" || input.length <= 1)
+      return null;
+    let P = 0;
+    for (let i = 0; i < input.length - 1; i++) {
+      let a = +input.charAt(i);
+      if (Number.isNaN(a))
+        return undefined;
+      P += a;
+      P <<= 1;
+    }
+    P += this.ccs.indexOf(input.charAt(input.length - 1));
+    return P % 11 === 1;
   }
 }
 

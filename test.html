@@ -41,13 +41,15 @@
                 console.log(algo.verify("01"));
         */
         algo = new MOD11_2();
-        
+
         document.writeln(algo.complete("079"));
         document.writeln(algo.complete("0794"));
         document.writeln(algo.verify("079X"));
         document.writeln(algo.verify("07940"));
+        document.writeln(algo.verify_fast("079X"));
+        document.writeln(algo.verify_fast("07940"));
         document.writeln("<br>");
-        
+
         algo = new MOD1271_36();
         document.writeln(algo.complete("ISO79"));
         document.writeln(algo.verify("ISO793W"));
