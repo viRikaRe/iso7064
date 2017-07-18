@@ -29,23 +29,23 @@ class PureSystemCalculator_poly {
 
     input = input.toUpperCase();
     let appLen = input.length;
-    let checkLen = 1 + this.dblchk;
-    let stop1 = Math.min(appLen + checkLen, this.w.length);
+    let chkLen = 1 + this.dblchk;
+    let wLen = this.w.length;
     let S = 0;
-    for (let i = checkLen; i < stop1; i++) {
-      let a = this.acs.indexOf(input.charAt(appLen + checkLen - i - 1));
-      if (a === -1) return undefined;
-      S += a * this.w[i];
+    let i = appLen;
+    while (i > 0) {
+      let a = this.acs.indexOf(input.charAt(i - 1));
+      if (a === -1)
+        return undefined;
+      if (wLen + i > appLen + chkLen)
+        S += a * this.w[appLen + chkLen - i];
+      else
+        S += a * Math.pow(this.r, appLen + chkLen - i);
+      i--;
     }
-    if (appLen + checkLen > stop1)
-      for (let i = Math.max(stop1, checkLen); i < appLen + checkLen; i++) {
-        let a = this.acs.indexOf(input.charAt(appLen + checkLen - i - 1));
-        if (a === -1) return undefined;
-        S += a * (Math.pow(this.r, i) % this.M);
-      }
 
     if (this.dblchk) {
-      let V = this.M + this.R - S;
+      let V = this.M + this.R - S % this.M;
       let quotient = ~~(V / this.r);
       let remainder = V - quotient * this.r;
       return this.ccs.charAt(quotient) + this.ccs.charAt(remainder);
