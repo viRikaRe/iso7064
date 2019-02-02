@@ -95,7 +95,8 @@ class HybridSystemCalculator extends PureSystemCalculator {
     for (let i = 0; i < input.length; i++) {
       let a = this.acs.indexOf(input.charAt(i));
       P = (P + a) % this.M;
-      if (P === 0) P = this.M;
+      if (P === 0)
+        P = this.M;
       P = (P * this.r) % (this.M + 1);
     }
     return this.ccs.charAt((this.M + this.R - P) % this.M);
@@ -210,7 +211,7 @@ class MOD27_26 extends HybridSystemCalculator {
 class MOD37_36 extends HybridSystemCalculator {
   constructor() {
     super({
-      Modulus: 26,
+      Modulus: 36,
       ApplicationCharset: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
       CheckCharset: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
       SingleDigitDesignation: 8
