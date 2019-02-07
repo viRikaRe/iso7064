@@ -8,7 +8,8 @@ class PureSystemCalculator_poly {
     ApplicationCharset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
     CheckCharset,
     IsDoubleCheckCharacter,
-    SingleDigitDesignation = 0
+    SingleDigitDesignation = 0,
+    IsCaseSensitive = false
   }) {
     this.M = Modulus;
     this.r = Radix;
@@ -18,6 +19,7 @@ class PureSystemCalculator_poly {
     this.ccs = CheckCharset;
     this.dblchk = IsDoubleCheckCharacter;
     this.desig = SingleDigitDesignation;
+    this.cs = IsCaseSensitive;
   }
 
   //Returns the computed check character(s) only
@@ -27,7 +29,7 @@ class PureSystemCalculator_poly {
     if (typeof input !== "string" || input === "")
       return null;
 
-    input = input.toUpperCase();
+    if (!this.cs) input = input.toUpperCase();
     let appLen = input.length;
     let chkLen = 1 + this.dblchk;
     let wLen = this.w.length;
@@ -71,7 +73,7 @@ class PureSystemCalculator_poly {
     let dataOnly = input.substr(0, input.length - checkLen);
     let checkbit = this.compute(dataOnly);
     if (typeof checkbit === "string")
-      return checkbit === input.substr(-checkLen);
+      return checkbit === (this.cs ? input.substr(-checkLen) : input.substr(-checkLen).toUpperCase());
     else
       return checkbit;
   }

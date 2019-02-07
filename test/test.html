@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" type="image/png" href="jasmine/lib/jasmine-3.3.0/jasmine_favicon.png">
+    <link rel="stylesheet" type="text/css" href="jasmine/lib/jasmine-3.3.0/jasmine.css">
+
+    <script type="text/javascript" src="jasmine/lib/jasmine-3.3.0/jasmine.js"></script>
+    <script type="text/javascript" src="jasmine/lib/jasmine-3.3.0/jasmine-html.js"></script>
+    <script type="text/javascript" src="jasmine/lib/jasmine-3.3.0/boot.js"></script>
+    <script type="text/javascript" src="../js/iso7064.js"></script>
+
+    <script type="text/javascript" src="../js/iso7064poly.js"></script>
+
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        let algo = new MOD11_2();
+
+        describe("===== Testing return type =====", function () { });
+
+        describe("Testing return type of compute() function", function () {
+            it("returns null if input is not a string", function () {
+                expect(algo.compute()).toBeNull();
+                expect(algo.compute(null)).toBeNull();
+                expect(algo.compute(NaN)).toBeNull();
+                expect(algo.compute(undefined)).toBeNull();
+                expect(algo.compute(1024)).toBeNull();
+                expect(algo.compute(false)).toBeNull();
+            });
+
+            it("returns null if input is an empty string", function () {
+                expect(algo.compute("")).toBeNull();
+            });
+
+            it("returns undefined if input contains character outside charset", function () {
+                expect(algo.compute("@")).toBeUndefined();
+                expect(algo.complete("🤣")).toBeUndefined();
+                expect(algo.compute("1234@")).toBeUndefined();
+                expect(algo.compute("@1234")).toBeUndefined();
+                expect(algo.compute("12@34")).toBeUndefined();
+            });
+
+            it("returns a string if input is valid", function () {
+                expect(algo.compute("1234")).toEqual(jasmine.any(String));
+            });
+        });
+
+        describe("Testing return type of complete() function", function () {
+            it("returns null if input is not a string", function () {
+                expect(algo.complete()).toBeNull();
+                expect(algo.complete(null)).toBeNull();
+                expect(algo.complete(NaN)).toBeNull();
+                expect(algo.complete(undefined)).toBeNull();
+                expect(algo.complete(1024)).toBeNull();
+                expect(algo.complete(false)).toBeNull();
+            });
+
+            it("returns null if input is an empty string", function () {
+                expect(algo.complete("")).toBeNull();
+            });
+
+            it("returns undefined if input contains character outside charset", function () {
+                expect(algo.complete("@")).toBeUndefined();
+                expect(algo.complete("🤣")).toBeUndefined();
+                expect(algo.complete("1234@")).toBeUndefined();
+                expect(algo.complete("@1234")).toBeUndefined();
+                expect(algo.complete("12@34")).toBeUndefined();
+            });
+
+            it("returns a string if input is valid", function () {
+                expect(algo.complete("1234")).toEqual(jasmine.any(String));
+            });
+        });
+
+        describe("Testing return type of verify() function", function () {
+            it("returns null if input is not a string", function () {
+                expect(algo.verify()).toBeNull();
+                expect(algo.verify(null)).toBeNull();
+                expect(algo.verify(NaN)).toBeNull();
+                expect(algo.verify(undefined)).toBeNull();
+                expect(algo.verify(1024)).toBeNull();
+                expect(algo.verify(false)).toBeNull();
+            });
+
+            it("returns null if input length is shorter than or equal to check length", function () {
+                expect(algo.verify("")).toBeNull();
+                expect(algo.verify("1")).toBeNull();
+                //expect(algo.verify("🤣")).toBeNull(); //Won't pass, because a unicode emoji is 2 characters long.
+            });
+
+            it("returns undefined if input (excl. check bit) contains character outside charset", function () {
+                expect(algo.verify("🤣")).toBeUndefined();
+                expect(algo.verify("@1234")).toBeUndefined();
+                expect(algo.verify("12@34")).toBeUndefined();
+            });
+
+            it("returns a boolean if input is valid", function () {
+                expect(algo.verify("1234")).toEqual(jasmine.any(Boolean));
+            });
+        });
+
+        describe("===== Testing value (samples in standard file) =====", function () { });
+
+        describe("Testing MOD 11-2 recursive method", function () {
+            let algo = new MOD11_2();
+            it("returns '0' to '0794'", function () {
+                expect(algo.compute("0794")).toBe("0");
+                expect(algo.complete("0794")).toBe("07940");
+                expect(algo.verify("07940")).toBe(true);
+                expect(algo.verify("07941")).toBe(false);
+            });
+            it("returns 'X' to '079'", function () {
+                expect(algo.compute("079")).toBe("X");
+                expect(algo.complete("079")).toBe("079X");
+                expect(algo.verify("079X")).toBe(true);
+                expect(algo.verify("079x")).toBe(true);
+                expect(algo.verify("0791")).toBe(false);
+            });
+        });
+
+        describe("Testing MOD 11-2 polynomial method", function () {
+            let algo = new MOD11_2_poly();
+            it("returns '0' to '0794'", function () {
+                expect(algo.compute("0794")).toBe("0");
+                expect(algo.complete("0794")).toBe("07940");
+                expect(algo.verify("07940")).toBe(true);
+                expect(algo.verify("07941")).toBe(false);
+            });
+            it("returns 'X' to '079'", function () {
+                expect(algo.compute("079")).toBe("X");
+                expect(algo.complete("079")).toBe("079X");
+                expect(algo.verify("079X")).toBe(true);
+                expect(algo.verify("079x")).toBe(true);
+                expect(algo.verify("0791")).toBe(false);
+            });
+        });
+
+        describe("Testing MOD 1271-36 recursive method", function () {
+            let algo = new MOD1271_36();
+            it("returns '3W' to 'ISO79'", function () {
+                expect(algo.compute("ISO79")).toBe("3W");
+                expect(algo.complete("ISO79")).toBe("ISO793W");
+                expect(algo.verify("ISO793W")).toBe(true);
+                expect(algo.verify("iso793w")).toBe(true);
+                expect(algo.verify("ISO794W")).toBe(false);
+            });
+        });
+
+        describe("Testing MOD 1271-36 polynomial method", function () {
+            let algo = new MOD1271_36_poly();
+            it("returns '3W' to 'ISO79'", function () {
+                expect(algo.compute("ISO79")).toBe("3W");
+                expect(algo.complete("ISO79")).toBe("ISO793W");
+                expect(algo.verify("ISO793W")).toBe(true);
+                expect(algo.verify("iso793w")).toBe(true);
+                expect(algo.verify("ISO794W")).toBe(false);
+            });
+        });
+
+        describe("Testing MOD 97-10 simplified procedure", function () {
+            let algo = new MOD97_10();
+            it("returns '44' to '794'", function () {
+                expect(algo.compute_fast("794")).toBe("44");
+                expect(algo.complete_fast("794")).toBe("79444");
+                expect(algo.verify_fast("79444")).toBe(true);
+                expect(algo.verify_fast("79445")).toBe(false);
+            });
+        });
+
+        describe("Testing MOD 11,10 polynomial method", function () {
+            let algo = new MOD11_10();
+            it("returns '3W' to 'ISO79'", function () {
+                expect(algo.compute("0794")).toBe("5");
+                expect(algo.complete("0794")).toBe("07945");
+                expect(algo.verify("07945")).toBe(true);
+                expect(algo.verify("07946")).toBe(false);
+            });
+        });
+    </script>
+</body>
+
+</html>

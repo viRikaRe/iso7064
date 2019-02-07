@@ -7,7 +7,8 @@ class PureSystemCalculator {
     ApplicationCharset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
     CheckCharset,
     IsDoubleCheckCharacter,
-    SingleDigitDesignation = 0
+    SingleDigitDesignation = 0,
+    IsCaseSensitive = false
   }) {
     this.M = Modulus;
     this.r = Radix;
@@ -16,16 +17,17 @@ class PureSystemCalculator {
     this.dblchk = IsDoubleCheckCharacter;
     this.R = Remainder;
     this.desig = SingleDigitDesignation;
+    this.cs = IsCaseSensitive;
   }
 
   //Returns the computed check character(s) only
-  //If input type is invalid, return null;
+  //If input type is invalid or input string is empty, return null;
   //If input string contains character outside charset, return undefined;
   compute(input) {
     if (typeof input !== "string" || input === "")
       return null;
 
-    input = input.toUpperCase();
+    if (!this.cs) input = input.toUpperCase();
     let P = 0;
     for (let i = 0; i < input.length; i++) {
       let a = this.acs.indexOf(input.charAt(i));
@@ -61,7 +63,7 @@ class PureSystemCalculator {
     let dataOnly = input.substr(0, input.length - checkLen);
     let checkbit = this.compute(dataOnly);
     if (typeof checkbit === "string")
-      return checkbit === input.substr(-checkLen);
+      return checkbit === (this.cs ? input.substr(-checkLen) : input.substr(-checkLen).toUpperCase());
     else
       return checkbit;
   }
@@ -71,12 +73,11 @@ class PureSystemCalculator {
 class HybridSystemCalculator extends PureSystemCalculator {
   constructor({
     Modulus,
-    Radix,
     Remainder,
     ApplicationCharset,
     CheckCharset,
-    IsDoubleCheckCharacter,
-    SingleDigitDesignation
+    SingleDigitDesignation,
+    IsCaseSensitive
   }) {
     super({
       Modulus: Modulus,
@@ -85,7 +86,8 @@ class HybridSystemCalculator extends PureSystemCalculator {
       ApplicationCharset: ApplicationCharset,
       CheckCharset: CheckCharset,
       IsDoubleCheckCharacter: false,
-      SingleDigitDesignation: SingleDigitDesignation
+      SingleDigitDesignation: SingleDigitDesignation,
+      IsCaseSensitive: IsCaseSensitive
     });
   }
 
@@ -158,6 +160,37 @@ class MOD97_10 extends PureSystemCalculator {
       SingleDigitDesignation: 3
     });
   }
+
+  //Simplified procedure for ISO/IEC 7064, MOD 97–10
+  compute_fast(input) {
+    if (typeof input !== "string" || input === "")
+      return null;
+
+    let P = 0;
+    for (let i = 0; i < input.length; i++) {
+      let a = +input.charAt(i);
+      if (Number.isNaN(a))
+        return undefined;
+    }
+    return `${98 - input * 100 % 97}`;
+  }
+  complete_fast(input) {
+    let checkbit = this.compute_fast(input);
+    if (typeof checkbit === "string")
+      return input + checkbit;
+    else
+      return checkbit;
+  }
+  verify_fast(input) {
+    if (typeof input !== "string" || input.length <= 2)
+      return null;
+    for (let i = 0; i < input.length; i++) {
+      let a = +input.charAt(i);
+      if (Number.isNaN(a))
+        return undefined;
+    }
+    return input % 97 === 1;
+  }
 }
 
 class MOD661_26 extends PureSystemCalculator {
@@ -219,6 +252,12 @@ class MOD37_36 extends HybridSystemCalculator {
   }
 }
 
+
+//GB 11643-1999
+//https://zh.wikisource.org/wiki/GB_11643-1999_公民身份号码
+class GB11643 extends MOD11_2 {
+  //Virtually the same
+}
 
 //GB 11714-1997
 //https://zh.wikisource.org/wiki/GB_11714-1997_全国组织机构代码编制规则
