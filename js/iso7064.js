@@ -4,7 +4,7 @@ class PureSystemCalculator {
     Modulus,
     Radix,
     Remainder = 1,
-    ApplicationCharset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    ApplicationCharset,
     CheckCharset,
     IsDoubleCheckCharacter,
     SingleDigitDesignation = 0,
@@ -18,7 +18,12 @@ class PureSystemCalculator {
     this.R = Remainder;
     this.desig = SingleDigitDesignation;
     this.cs = IsCaseSensitive;
+
     this.patt_a = new RegExp('^[' + this.acs + ']+$', this.cs ? null : 'i')
+    this.acsEnum = {};
+    for (let i = 0; i < this.acs.length; i++)
+      this.acsEnum[this.acs[i]] = i;
+    Object.freeze(this.acsEnum);
   }
 
   //Returns the computed check character(s) only
@@ -35,7 +40,7 @@ class PureSystemCalculator {
 
     let P = 0;
     for (let i = 0; i < input.length; i++) {
-      let a = this.acs.indexOf(input.charAt(i));
+      let a = this.acsEnum[input.charAt(i)];
       P = ((P + a) * this.r) % this.M;
     }
     if (this.dblchk) {
@@ -105,7 +110,7 @@ class HybridSystemCalculator extends PureSystemCalculator {
 
     let P = this.M;
     for (let i = 0; i < input.length; i++) {
-      let a = this.acs.indexOf(input.charAt(i));
+      let a = this.acsEnum[input.charAt(i)];
       P = (P + a) % this.M;
       if (P === 0)
         P = this.M;
@@ -130,7 +135,7 @@ class MOD11_2 extends PureSystemCalculator {
     this.patt_fast = new RegExp(/^\d+[\dX]$/, this.cs ? null : 'i');
   }
 
-  //3x faster on Chrome; 2x faster on Edge; the same on Firefox
+  //Faster on Chrome & Edge; slower on Firefox
   verify_fast(input) {
     if (typeof input !== "string" || input.length <= 1)
       return null;
@@ -265,7 +270,11 @@ class MOD37_36 extends HybridSystemCalculator {
 //GB 11643-1999
 //https://zh.wikisource.org/wiki/GB_11643-1999_公民身份号码
 class GB11643 extends MOD11_2 {
-  //Virtually the same
+  constructor() {
+    super({
+      IsCaseSensitive: true
+    })
+  }
 }
 
 //GB 11714-1997
@@ -278,7 +287,8 @@ class GB11714 extends PureSystemCalculator {
       Remainder: 0,
       ApplicationCharset: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
       CheckCharset: "0123456789X",
-      IsDoubleCheckCharacter: false
+      IsDoubleCheckCharacter: false,
+      IsCaseSensitive: true
     });
   }
 }
@@ -293,14 +303,14 @@ class GB32100 extends PureSystemCalculator {
       ApplicationCharset: "0123456789ABCDEFGHJKLMNPQRTUWXY",
       CheckCharset: "0123456789ABCDEFGHJKLMNPQRTUWXY",
       IsDoubleCheckCharacter: false,
-      Remainder: 0
+      Remainder: 0,
+      IsCaseSensitive: true
     });
   }
   compute(input) {
-    input = input.toUpperCase();
     let P = 0;
     for (let i = input.length - 1; i >= 0; i--) {
-      let a = this.acs.indexOf(input.charAt(i));
+      let a = this.acsEnum[input.charAt(i)];
       P = ((P * this.r) % this.M + a);
     }
     return this.ccs.charAt((this.M + this.R - P) % this.M);

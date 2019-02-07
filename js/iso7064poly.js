@@ -5,7 +5,7 @@ class PureSystemCalculator_poly {
     Radix,
     Weight = [],
     Remainder = 1,
-    ApplicationCharset = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    ApplicationCharset,
     CheckCharset,
     IsDoubleCheckCharacter,
     SingleDigitDesignation = 0,
@@ -20,7 +20,12 @@ class PureSystemCalculator_poly {
     this.dblchk = IsDoubleCheckCharacter;
     this.desig = SingleDigitDesignation;
     this.cs = IsCaseSensitive;
+
     this.patt_a = new RegExp('^[' + this.acs + ']+$', this.cs ? null : 'i')
+    this.acsEnum = {};
+    for (let i = 0; i < this.acs.length; i++)
+      this.acsEnum[this.acs[i]] = i;
+    Object.freeze(this.acsEnum);
   }
 
   //Returns the computed check character(s) only
@@ -40,7 +45,7 @@ class PureSystemCalculator_poly {
     let S = 0;
     let i = appLen;
     while (i > 0) {
-      let a = this.acs.indexOf(input.charAt(i - 1));
+      let a = this.acsEnum[input.charAt(i - 1)];
       if (wLen + i > appLen + chkLen)
         S += a * this.w[appLen + chkLen - i];
       else

@@ -13,7 +13,7 @@
     <script>
         function startBench(k) {
             let t0 = performance.now();
-            let finished = VerifyStringAgainstCharsetCaller(k);
+            let finished = CompareMOD11_2FastMethodCaller(k);
             let t1 = performance.now();
             if (finished)
                 document.getElementById('lblTest' + k).innerText = ~~(t1 - t0) + ' ms';
@@ -61,7 +61,7 @@
                 let len = str.length;
                 for (let i = 0; i < loops; i++) {
                     for (let j = 0; j < len; j++)
-                        charsetEnum[str[j]];
+                        charsetEnum[str.charAt(j)];
                 }
                 return true;
             }
