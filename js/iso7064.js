@@ -18,6 +18,7 @@ class PureSystemCalculator {
     this.R = Remainder;
     this.desig = SingleDigitDesignation;
     this.cs = IsCaseSensitive;
+    this.patt_a = new RegExp('^[' + this.acs + ']+$', this.cs ? null : 'i')
   }
 
   //Returns the computed check character(s) only
@@ -27,12 +28,14 @@ class PureSystemCalculator {
     if (typeof input !== "string" || input === "")
       return null;
 
+    if (!this.patt_a.test(input))
+      return undefined;
+
     if (!this.cs) input = input.toUpperCase();
+
     let P = 0;
     for (let i = 0; i < input.length; i++) {
       let a = this.acs.indexOf(input.charAt(i));
-      if (a === -1)
-        return undefined;
       P = ((P + a) * this.r) % this.M;
     }
     if (this.dblchk) {
@@ -92,7 +95,14 @@ class HybridSystemCalculator extends PureSystemCalculator {
   }
 
   compute(input) {
-    input = input.toUpperCase();
+    if (typeof input !== "string" || input === "")
+      return null;
+
+    if (!this.patt_a.test(input))
+      return undefined;
+
+    if (!this.cs) input = input.toUpperCase();
+
     let P = this.M;
     for (let i = 0; i < input.length; i++) {
       let a = this.acs.indexOf(input.charAt(i));
@@ -117,18 +127,20 @@ class MOD11_2 extends PureSystemCalculator {
       IsDoubleCheckCharacter: false,
       SingleDigitDesignation: 1
     });
+    this.patt_fast = new RegExp(/^\d+[\dX]$/, this.cs ? null : 'i');
   }
 
-  //Much faster on Chrome; the same on Firefox; slower on Edge
+  //3x faster on Chrome; 2x faster on Edge; the same on Firefox
   verify_fast(input) {
     if (typeof input !== "string" || input.length <= 1)
       return null;
+
+    if (!this.patt_fast.test(input))
+      return undefined;
+
     let P = 0;
     for (let i = 0; i < input.length - 1; i++) {
-      let a = +input.charAt(i);
-      if (Number.isNaN(a))
-        return undefined;
-      P += a;
+      P += +input.charAt(i);
       P <<= 1;
     }
     P += this.ccs.indexOf(input.charAt(input.length - 1));
@@ -159,6 +171,7 @@ class MOD97_10 extends PureSystemCalculator {
       IsDoubleCheckCharacter: true,
       SingleDigitDesignation: 3
     });
+    this.patt_fast = new RegExp(/^\d+$/);
   }
 
   //Simplified procedure for ISO/IEC 7064, MOD 97–10
@@ -166,12 +179,9 @@ class MOD97_10 extends PureSystemCalculator {
     if (typeof input !== "string" || input === "")
       return null;
 
-    let P = 0;
-    for (let i = 0; i < input.length; i++) {
-      let a = +input.charAt(i);
-      if (Number.isNaN(a))
-        return undefined;
-    }
+    if (!this.patt_fast.test(input))
+      return undefined;
+
     return `${98 - input * 100 % 97}`;
   }
   complete_fast(input) {
@@ -184,11 +194,10 @@ class MOD97_10 extends PureSystemCalculator {
   verify_fast(input) {
     if (typeof input !== "string" || input.length <= 2)
       return null;
-    for (let i = 0; i < input.length; i++) {
-      let a = +input.charAt(i);
-      if (Number.isNaN(a))
-        return undefined;
-    }
+
+    if (!this.patt_fast.test(input))
+      return undefined;
+
     return input % 97 === 1;
   }
 }

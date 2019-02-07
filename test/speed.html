@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <script src="../js/iso7064.js"></script>
+
+    <title>Speed Test</title>
+
+    <script>
+        function startBench(k) {
+            let t0 = performance.now();
+            let finished = VerifyStringAgainstCharsetCaller(k);
+            let t1 = performance.now();
+            if (finished)
+                document.getElementById('lblTest' + k).innerText = ~~(t1 - t0) + ' ms';
+            else
+                document.getElementById('lblTest' + k).innerText = "Not implemented.";
+        }
+    </script>
+
+    <script>
+        function VerifyStringAgainstCharsetCaller(which) {
+            let loops = 999999;
+            //let str = 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ'; //good string
+            let str = 'ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ.'; //bad string
+            let charset = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+            if (which === 1) {
+                let patt = new RegExp('^[' + charset + ']+$', 'i');
+                for (let i = 0; i < loops; i++)
+                    patt.test(str);
+                return true;
+            }
+
+            if (which === 2) {
+                let patt = new RegExp('^[' + charset + ']+$', 'i');
+                for (let i = 0; i < loops; i++)
+                    str.match(patt);
+                return true;
+            }
+
+            if (which === 3) {
+                let len = str.length;
+                for (let i = 0; i < loops; i++) {
+                    for (let j = 0; j < len; j++)
+                        charset.indexOf(str[j]);
+                }
+                return true;
+            }
+
+            if (which === 4) {
+                let charsetEnum = {};
+                for (let i = 0; i < charset.length; i++)
+                    charsetEnum[charset[i]] = i;
+                Object.freeze(charsetEnum);
+
+                let len = str.length;
+                for (let i = 0; i < loops; i++) {
+                    for (let j = 0; j < len; j++)
+                        charsetEnum[str[j]];
+                }
+                return true;
+            }
+
+            if (which === 5) {
+                let charsetEnum = {
+                    '0': 0,
+                    '1': 1,
+                    '2': 2,
+                    '3': 3,
+                    '4': 4,
+                    '5': 5,
+                    '6': 6,
+                    '7': 7,
+                    '8': 8,
+                    '9': 9,
+                    'A': 10,
+                    'B': 11,
+                    'C': 12,
+                    'D': 13,
+                    'E': 14,
+                    'F': 15,
+                    'G': 16,
+                    'H': 17,
+                    'I': 18,
+                    'J': 19,
+                    'K': 20,
+                    'L': 21,
+                    'M': 22,
+                    'N': 23,
+                    'O': 24,
+                    'P': 25,
+                    'Q': 26,
+                    'R': 27,
+                    'S': 28,
+                    'T': 29,
+                    'U': 30,
+                    'V': 31,
+                    'W': 32,
+                    'X': 33,
+                    'Y': 34,
+                    'Z': 35,
+                };
+                Object.freeze(charsetEnum);
+
+                let len = str.length;
+                for (let i = 0; i < loops; i++) {
+                    for (let j = 0; j < len; j++)
+                        charsetEnum[str[j]];
+                }
+                return true;
+            }
+
+            return false;
+        }
+    </script>
+
+    <script>
+        function CompareMOD11_2FastMethodCaller(which) {
+            let loops = 999999;
+            let input = '1627385093827436';
+            let algo = new MOD11_2();
+
+            if (which === 1) {
+                for (let i = 0; i < loops; i++)
+                    algo.verify(input);
+                return true;
+            }
+
+            if (which === 2) {
+                for (let i = 0; i < loops; i++)
+                    algo.verify_fast(input);
+                return true;
+            }
+
+            return false;
+        }
+    </script>
+
+    <script>
+        function CompareMOD97_10FastMethodCaller(which) {
+            let loops = 999999;
+            let input = '1627385093827436';
+            let algo = new MOD97_10();
+
+            if (which === 1) {
+                for (let i = 0; i < loops; i++)
+                    algo.verify(input);
+                return true;
+            }
+
+            if (which === 2) {
+                for (let i = 0; i < loops; i++)
+                    algo.verify_fast(input);
+                return true;
+            }
+
+            return false;
+        }
+    </script>
+</head>
+
+<body>
+    <script>
+        for (let k = 1; k <= 5; k++) {
+            var newPara = document.createElement("p");
+            var newButton = document.createElement("input");
+            newButton.id = 'btnTest' + k;
+            newButton.type = 'button';
+            newButton.value = 'Method ' + k;
+            newButton.addEventListener("click", function (e) { startBench(k); });
+            var newLabel = document.createElement('span');
+            newLabel.id = 'lblTest' + k;
+
+            newPara.appendChild(newButton);
+            newPara.appendChild(newLabel);
+            document.body.insertBefore(newPara, null);
+        }
+    </script>
+</body>
+
+</html>

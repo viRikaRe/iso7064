@@ -20,6 +20,7 @@ class PureSystemCalculator_poly {
     this.dblchk = IsDoubleCheckCharacter;
     this.desig = SingleDigitDesignation;
     this.cs = IsCaseSensitive;
+    this.patt_a = new RegExp('^[' + this.acs + ']+$', this.cs ? null : 'i')
   }
 
   //Returns the computed check character(s) only
@@ -29,6 +30,9 @@ class PureSystemCalculator_poly {
     if (typeof input !== "string" || input === "")
       return null;
 
+    if (!this.patt_a.test(input))
+      return undefined;
+
     if (!this.cs) input = input.toUpperCase();
     let appLen = input.length;
     let chkLen = 1 + this.dblchk;
@@ -37,8 +41,6 @@ class PureSystemCalculator_poly {
     let i = appLen;
     while (i > 0) {
       let a = this.acs.indexOf(input.charAt(i - 1));
-      if (a === -1)
-        return undefined;
       if (wLen + i > appLen + chkLen)
         S += a * this.w[appLen + chkLen - i];
       else

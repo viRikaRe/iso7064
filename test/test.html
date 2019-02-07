@@ -15,7 +15,7 @@
 
     <script type="text/javascript" src="../js/iso7064poly.js"></script>
 
-    <title>Document</title>
+    <title>Unit Test</title>
 </head>
 
 <body>
@@ -173,7 +173,7 @@
             });
         });
 
-        describe("Testing MOD 11,10 polynomial method", function () {
+        describe("Testing MOD 11,10 recursive method", function () {
             let algo = new MOD11_10();
             it("returns '3W' to 'ISO79'", function () {
                 expect(algo.compute("0794")).toBe("5");
