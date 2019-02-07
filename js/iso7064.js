@@ -133,7 +133,10 @@ class MOD11_2 extends PureSystemCalculator {
       IsDoubleCheckCharacter: false,
       SingleDigitDesignation: 1
     });
+
     this.patt_fast = new RegExp(/^\d+[\dX]$/, this.cs ? null : "i");
+
+    this.ccsEnum = { "0": 0, "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "X": 10 };
   }
 
   //Faster on Chrome & Edge; slower on Firefox
@@ -149,7 +152,7 @@ class MOD11_2 extends PureSystemCalculator {
       P += +input.charAt(i);
       P <<= 1;
     }
-    P += this.ccs.indexOf(input.charAt(input.length - 1));
+    P += this.ccsEnum[input.charAt(input.length - 1)];
     return P % 11 === 1;
   }
 }
