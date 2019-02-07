@@ -21,7 +21,7 @@ class PureSystemCalculator_poly {
     this.desig = SingleDigitDesignation;
     this.cs = IsCaseSensitive;
 
-    this.patt_a = new RegExp('^[' + this.acs + ']+$', this.cs ? null : 'i')
+    this.patt_a = new RegExp(`^[${this.acs}]+$`, this.cs ? null : "i")
     this.acsEnum = {};
     for (let i = 0; i < this.acs.length; i++)
       this.acsEnum[this.acs[i]] = i;
