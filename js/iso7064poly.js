@@ -46,9 +46,9 @@ class PureSystemCalculator_poly {
     let i = appLen;
     while (i > 0) {
       let a = this.acsEnum[input.charAt(i - 1)];
-      if (wLen + i > appLen + chkLen)
+      if (wLen + i > appLen + chkLen) //if character position is within preset weight array, then use preset
         S += a * this.w[appLen + chkLen - i];
-      else
+      else //if character position is beyond preset weight array, then calculate its weight
         S += a * Math.pow(this.r, appLen + chkLen - i);
       i--;
     }
@@ -154,6 +154,21 @@ class MOD1271_36_poly extends PureSystemCalculator_poly {
       CheckCharset: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
       IsDoubleCheckCharacter: true,
       SingleDigitDesignation: 5
+    });
+  }
+}
+
+
+//Example on extension: MOD 29-2 (polynomial) on Danish alphabet (see Annex B of ISO/IEC 7064)
+class MOD29_2_DK_poly extends PureSystemCalculator_poly {
+  constructor() {
+    super({
+      Modulus: 29,
+      Radix: 2,
+      weight: [1, 2, 4, 8, 16, 3, 6, 12, 24, 19, 9, 18, 7, 14, 28],
+      ApplicationCharset: "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ",
+      CheckCharset: "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ",
+      IsDoubleCheckCharacter: false
     });
   }
 }

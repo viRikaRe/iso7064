@@ -314,3 +314,16 @@ class GB32100 extends PureSystemCalculator {
     return this.ccs.charAt((this.M + this.R - P) % this.M);
   }
 }
+
+//Example on extension: MOD 29-2 (recursive) on Danish alphabet (see Annex B of ISO/IEC 7064)
+class MOD29_2_DK extends PureSystemCalculator {
+  constructor() {
+    super({
+      Modulus: 29,
+      Radix: 2,
+      ApplicationCharset: "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ",
+      CheckCharset: "ABCDEFGHIJKLMNOPQRSTUVWXYZÆØÅ",
+      IsDoubleCheckCharacter: false
+    });
+  }
+}
