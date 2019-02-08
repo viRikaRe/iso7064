@@ -9,10 +9,10 @@ Compatibility: ES6+.
 ## Example Usage
 
 ### Basic usage
-```
+```javascript
 let algo = new MOD11_2();
 console.log(algo.compute("079"));   //"X"
-console.log(algo.complete("079"));   //"079X"
+console.log(algo.complete("079"));  //"079X"
 console.log(algo.verify("079X"));   //true
 ```
 
@@ -31,6 +31,9 @@ class MOD29_2_DK extends PureSystemCalculator {
     });
   }
 }
+
+let algo = new MOD29_2_DK();
+console.log(algo.compute("HALLØJSA")); //Å
 ```
 
 ## Syntax
@@ -41,6 +44,27 @@ Declare and initialize algorithm:
 ```javascript
 let algorithm = new ALGORITHM_CLASS();
 ```
+
+Pre-defined algorithm classes:
+
+Class name | Full designation | Method
+--- | --- | ---
+MOD11_2 | ISO/IEC 7064, MOD 11–2 | Recursive
+MOD11_2_poly | ISO/IEC 7064, MOD 11–2 | Polynomial
+MOD37_2 | ISO/IEC 7064, MOD 37–2 | Recursive
+MOD37_2_poly | ISO/IEC 7064, MOD 37–2 | Polynomial
+MOD97_10 | ISO/IEC 7064, MOD 97–10 | Recursive
+MOD97_10_poly | ISO/IEC 7064, MOD 97–10 | Polynomial
+MOD661_26 | ISO/IEC 7064, MOD 661–26 | Recursive
+MOD661_26_poly | ISO/IEC 7064, MOD 661–26 | Polynomial
+MOD1271_36 | ISO/IEC 7064, MOD 1271–36 | Recursive
+MOD1271_36_poly | ISO/IEC 7064, MOD 1271–36 | Polynomial
+MOD11_10 | ISO/IEC 7064, MOD 11,10 | Recursive
+MOD27_26 | ISO/IEC 7064, MOD 27,26 | Recursive
+MOD37_36 | ISO/IEC 7064, MOD 37,36 | Recursive
+GB11643 | (CN) GB 11643-1999 | Recursive
+GB11714 | (CN) GB 11714-1997 | Recursive
+GB32100 | (CN) GB 32100-2015 | Recursive
 
 Calculate the check character(s):
 
