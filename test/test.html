@@ -182,6 +182,48 @@
                 expect(algo.verify("07946")).toBe(false);
             });
         });
+
+        describe("===== Cross check recursive method & polynomial method =====", function () {
+            let data_n = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]; //numeric
+            let data_a = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]; //alphabetic
+            let data_an = data_n.concat(data_a); //alphanumeric
+            let seed = "1026837563019274847"; //preset random seed
+            data_n.forEach(elem => { elem = seed + elem });
+            data_a.forEach(elem => { elem = seed + elem });
+            data_an.forEach(elem => { elem = seed + elem });
+
+            it("cross check on MOD 11-2", function () {
+                let algor = new MOD11_2(), algop = new MOD11_2_poly();
+                data_n.forEach(elem => { expect(algor.compute(elem)).toBe(algop.compute(elem)); });
+                data_n.forEach(elem => { expect(algor.verify_fast(elem)).toBe(algop.verify(elem)); });
+            });
+
+            it("cross check on MOD 37-2", function () {
+                let algor = new MOD37_2(), algop = new MOD37_2_poly();
+                data_an.forEach(elem => { expect(algor.compute(elem)).toBe(algop.compute(elem)); });
+            });
+
+            it("cross check on MOD 97-10", function () {
+                let algor = new MOD97_10(), algop = new MOD97_10_poly();
+                data_n.forEach(elem => { expect(algor.compute(elem)).toBe(algop.compute(elem)); });
+                data_n.forEach(elem => { expect(algor.compute_fast(elem)).toBe(algop.compute(elem)); });
+                data_n.forEach(elem => { expect(algor.verify_fast(elem)).toBe(algop.verify(elem)); });
+            });
+
+            it("cross check on MOD 661-26", function () {
+                let algor = new MOD661_26(), algop = new MOD661_26_poly();
+                data_a.forEach(elem => { expect(algor.compute(elem)).toBe(algop.compute(elem)); });
+            });
+
+            it("cross check on MOD 1271-36", function () {
+                let algor = new MOD1271_36(), algop = new MOD1271_36_poly();
+                data_an.forEach(elem => { expect(algor.compute(elem)).toBe(algop.compute(elem)); });
+            });
+        });
+
+        describe("===== Ad hoc tests =====", function () {
+
+        });
     </script>
 </body>
 
