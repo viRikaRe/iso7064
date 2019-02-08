@@ -274,11 +274,7 @@ class MOD37_36 extends HybridSystemCalculator {
 //GB 11643-1999
 //https://zh.wikisource.org/wiki/GB_11643-1999_公民身份号码
 class GB11643 extends MOD11_2 {
-  constructor() {
-    super({
-      IsCaseSensitive: true
-    })
-  }
+  //Basically the same as MOD 11-2
 }
 
 //GB 11714-1997
@@ -291,8 +287,7 @@ class GB11714 extends PureSystemCalculator {
       Remainder: 0,
       ApplicationCharset: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
       CheckCharset: "0123456789X",
-      IsDoubleCheckCharacter: false,
-      IsCaseSensitive: true
+      IsDoubleCheckCharacter: false
     });
   }
 }
@@ -307,8 +302,7 @@ class GB32100 extends PureSystemCalculator {
       ApplicationCharset: "0123456789ABCDEFGHJKLMNPQRTUWXY",
       CheckCharset: "0123456789ABCDEFGHJKLMNPQRTUWXY",
       IsDoubleCheckCharacter: false,
-      Remainder: 0,
-      IsCaseSensitive: true
+      Remainder: 0
     });
   }
   compute(input) {
