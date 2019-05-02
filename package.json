@@ -1,0 +1,33 @@
+{
+  "name": "iso7064",
+  "description": "A simple and extensible JavaScript library implementing ISO/IEC 7064:2003 and some similar variant.",
+  "version": "1.0.0",
+  "keywords": [
+    "ISO7064",
+    "Check digit",
+    "IBAN",
+    "LEI",
+    "Mod97",
+    "Validation"
+  ],
+  "maintainers": [
+    {
+      "name": "viRikaRe",
+      "email": "",
+      "web": ""
+    }
+  ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/viRikaRe/iso7064.git"
+    }
+  ],
+  "licenses": [
+    {
+      "name": "Apache License 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  ],
+  "homepage": "https://github.com/viRikaRe/iso7064"
+}
